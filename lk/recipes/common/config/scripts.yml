@@ -1,0 +1,6 @@
+type: script
+scripts:
+  - common/containers-add-wrappers.sh
+  - common/brave-enable-flags.sh
+  - common/micro-create-wrapper.sh
+  - common/unity-use-discrete-gpu.sh

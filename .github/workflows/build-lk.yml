@@ -1,0 +1,24 @@
+name: Build LK
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  build:
+    name: LK
+    uses: ./.github/workflows/build-template.yml
+    with:
+      working-directory: ./lk
+      recipe-matrix: >
+        [
+        "cosmic/recipe.yml",
+        "cosmic/recipe-nvidia.yml",
+        "kde/recipe.yml",
+        "kde/recipe-nvidia.yml"
+        ]

@@ -1,0 +1,36 @@
+name: Build Template
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        required: true
+        type: string
+      recipe-matrix:
+        required: true
+        type: string
+
+concurrency:
+  # group: ${{ github.workflow }}-${{ github.ref || github.run_id }}  # Cancels per workflow (isolation)
+  group: build-${{ github.ref || github.run_id }}                     # Cancels everything (no isolation)
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        recipe: ${{ fromJSON(inputs.recipe-matrix) }}
+    steps:
+      - name: Build
+        uses: blue-build/github-action@v1.9
+        with:
+          recipe: ${{ matrix.recipe }}
+          cosign_private_key: ${{ secrets.SIGNING_SECRET }}
+          registry_token: ${{ github.token }}
+          pr_event_number: ${{ github.event.number || '' }}
+          working_directory: ${{ inputs.working-directory }}
+          maximize_build_space: true
+          rechunk: true

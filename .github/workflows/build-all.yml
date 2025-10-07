@@ -1,0 +1,24 @@
+name: Build All
+
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "00 02 * * *"
+  push:
+    paths-ignore: ["**.md"]
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  build-base:
+    name: Base
+    uses: ./.github/workflows/build-base.yml
+
+  build-lk:
+    name: LK
+    needs: build-base
+    uses: ./.github/workflows/build-lk.yml

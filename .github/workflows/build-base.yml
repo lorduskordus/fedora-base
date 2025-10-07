@@ -1,0 +1,22 @@
+name: Build Base
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  build:
+    name: Base
+    uses: ./.github/workflows/build-template.yml
+    with:
+      working-directory: ./base
+      recipe-matrix: >
+        [
+        "cosmic/recipe.yml",
+        "kde/recipe.yml"
+        ]
